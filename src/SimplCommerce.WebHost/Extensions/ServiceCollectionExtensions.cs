@@ -37,7 +37,7 @@ namespace SimplCommerce.WebHost.Extensions
         {
             foreach (var module in _modulesConfig.GetModules())
             {
-                if(!module.IsBundledWithHost)
+                if (!module.IsBundledWithHost)
                 {
                     TryLoadModuleAssembly(module.Id, module);
                     if (module.Assembly == null)
@@ -93,7 +93,7 @@ namespace SimplCommerce.WebHost.Extensions
             (this IMvcBuilder mvc, IServiceCollection services)
         {
             return mvc.AddMvcOptions(o =>
-            {                
+            {
                 var factory = services.BuildServiceProvider().GetService<IStringLocalizerFactory>();
                 var L = factory.Create(null);
 
@@ -149,12 +149,12 @@ namespace SimplCommerce.WebHost.Extensions
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer(options =>
-                 {
-                     options.Events.RaiseErrorEvents = true;
-                     options.Events.RaiseInformationEvents = true;
-                     options.Events.RaiseFailureEvents = true;
-                     options.Events.RaiseSuccessEvents = true;
-                 })
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
                  .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
                  .AddInMemoryApiResources(IdentityServerConfig.Apis)
                  .AddInMemoryClients(IdentityServerConfig.Clients)
@@ -218,9 +218,9 @@ namespace SimplCommerce.WebHost.Extensions
 
         public static IServiceCollection AddCustomizedDataStore(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContextPool<SimplDbContext>(options => 
+            services.AddDbContextPool<SimplDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("SimplCommerce.WebHost"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("SimplCommerce.WebHost"));
                 options.EnableSensitiveDataLogging();
             });
             return services;
